@@ -1,0 +1,84 @@
+#plzfill2 {
+    font-family: 'Athiti', sans-serif;
+    text-align: center;
+    color: white;
+    font-size: 60px;
+    padding: 2% 2% 2% 2%;
+    margin-bottom: 0%;
+    background-color: black;
+}
+
+#backmain {
+    background-image: url(../images/wall.jpg);
+}
+
+#backinfo2 {
+    padding: 3%;
+    margin-top: 0%;
+    background-color: rgba(255, 255, 255, 0.65);
+}
+
+#tdee {
+    font-family: 'Major Mono Display', monospace;
+    text-align: center;
+    font-size: 100px;
+}
+
+#calmain {
+    font-family: 'Major Mono Display', monospace;
+    text-align: center;
+    font-size: 50px;
+}
+
+
+/*ข่างล่างคือส่วนของปุ่มหมดเลย*/
+
+#calcal {
+    font-family: 'Athiti', sans-serif;
+    margin: 5% 5% 5% 5%;
+    padding: 2% 2% 2% 2%;
+    font-size: 30px;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+}
+
+#food {
+    font-family: 'Athiti', sans-serif;
+    margin: 5% 5% 5% 5%;
+    padding: 2% 2% 2% 2%;
+    font-size: 30px;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+}
+
+a:link#calcal {
+    text-decoration: none;
+    background-color: black;
+}
+
+a:visited#calcal {
+    text-decoration: none;
+}
+
+a:hover#calcal {
+    text-decoration: none!important;
+    background-color: pink;
+    color: black!important;
+}
+
+a:link#food {
+    text-decoration: none;
+    background-color: black;
+}
+
+a:visited#food {
+    text-decoration: none;
+}
+
+a:hover#food {
+    text-decoration: none!important;
+    background-color: #9ACD32;
+    color: black!important;
+}

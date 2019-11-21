@@ -1,0 +1,62 @@
+#showresult{
+    margin:9% 0% 0% 0%;
+    padding: 2% 2% 2% 2%;
+    background-color: black;
+}
+#back2{
+    /* margin:0% 30% 10% 30%; */
+    padding: 2% 2% 2% 2%;
+    background-color: #C0C0C0;
+}
+
+#resulth1{
+    font-family: 'Rajdhani', sans-serif;
+    text-align: center;
+    color:white;
+    font-size: 80px;
+}
+
+#back {
+    background-image: url(../images/wall.jpg);
+}
+
+#remain{
+    text-align: center;
+    font-family: 'Athiti', sans-serif;
+}
+
+#recal{
+    font-family: 'Major Mono Display', monospace;
+    text-align: center;
+    font-size: 100px;
+}
+
+#cal{
+    font-family: 'Major Mono Display', monospace;
+    text-align: center;
+    font-size: 50px;
+}
+#backmenu{
+    font-family: 'Athiti', sans-serif;
+    margin: 5% 5% 5% 5%;
+    padding: 2% 2% 2% 2%;
+    font-size: 30px;
+    color: white;
+    border: 0px!important;
+    display: inline-flex;
+    justify-content: center;
+}
+a:link{
+    text-decoration: none;
+    background-color: black;
+}
+
+a:visited{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: none!important;
+    background-color: orange;
+    color: black!important;
+}

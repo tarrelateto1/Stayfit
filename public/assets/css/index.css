@@ -1,0 +1,55 @@
+img#pic {
+    margin-top: 5%;
+    width: 50%;
+    height: 50%;
+}
+
+.enter-btn {
+    font-family: 'Athiti', sans-serif;
+    margin: 2% 5% 1% 5%;
+    padding: 2% 2% 2% 2%;
+    font-size: 30px;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+}
+
+a:link.enter-btn {
+    text-decoration: none;
+    background-color: black;
+}
+
+a:visited.enter-btn {
+    text-decoration: none;
+}
+
+a:hover.enter-btn {
+    text-decoration: none!important;
+    background-color: #4A9586;
+    color: whitesmoke;
+}
+
+.help-btn {
+    font-family: 'Athiti', sans-serif;
+    margin: -1% 5% 5% 5%;
+    padding: 1%;
+    font-size: 30px;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+}
+
+a:link.help-btn {
+    text-decoration: none;
+    background-color: rosybrown;
+}
+
+a:visited.help-btn {
+    text-decoration: none;
+}
+
+a:hover.help-btn {
+    text-decoration: none!important;
+    background-color: powderblue;
+    color: black!important;
+}

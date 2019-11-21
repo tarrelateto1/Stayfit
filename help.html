@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<title>Help</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Athiti">
+<link rel="stylesheet" href="./assets/css/help.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<body id="backhelp">
+
+    <nav class="navbar bg-dark navbar-dark">
+        <a class="navbar-brand" href="http://localhost:2581/">StayFit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#infoPage">Information Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#mainPage">Main Menu Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#recievedCalPage">Received Calories Calculator Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#recievedCal2Page">Received Calories Calculator2 Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#fooddetailPage">Recommended Menu Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#resultPage">Result Page</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
+        <img class="w3-image" src="./assets/images/welcome.png" alt="WelcomeImg" width="1600" height="800">
+        <div class="w3-display-bottomleft w3-padding-large w3-opacity">
+            <h1 class="w3-xxlarge" id="header-help">StayFit User Manual</h1>
+        </div>
+    </header>
+
+    <!-- Page content -->
+    <div class="w3-content" style="max-width:1100px">
+
+        <!-- Information Section -->
+        <div class="w3-row w3-padding-64" id="infoPage">
+            <div class="w3-col l6 w3-padding-large">
+                <img src="./assets/images/helpInfo.jpg" class="w3-round w3-image w3-opacity-min" alt="InfoImg" width="600" height="750">
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <h4 class="w3-center">Information Page</h4>
+                <p class="w3-large">หน้านี้เป็นหน้าทีจะให้ผู้ใช้กรอกข้อมูลส่วนตัวต่างๆ <span class="w3-meduim" style="color: red">โดยทางเราจะไม่นำข้อมูลส่วนตัวของผู้ใช้ไปเผยแพร่เป็นอันขาด</span></p>
+                <p class="w3-medium"><b>หมายเลข 1:</b> เป็นส่วนที่ให้ผู้ใช้กรอกชื่อ <span class="w3-small" style="color: red">(*กรอกเป็นภาษาอังกฤษเท่านั้น)</span></p>
+                <p class="w3-medium"><b>หมายเลข 2:</b> เป็นส่วนที่ให้ผู้ใช้กรอกอายุ <span class="w3-small" style="color: red">(*กรอกเป็นตัวเลขเท่านั้น)</span></p>
+                <p class="w3-medium"><b>หมายเลข 3:</b> เป็นส่วนที่ให้ผู้ใช้เลือกเพศ</p>
+                <p class="w3-medium"><b>หมายเลข 4:</b> เป็นส่วนที่ให้ผู้ใช้กรอกน้ำหนัก<span class="w3-small" style="color: red">(*กรอกเป็นตัวเลขเท่านั้น)</span></p>
+                <p class="w3-medium"><b>หมายเลข 5:</b> เป็นส่วนที่ให้ผู้ใช้กรอกส่วนสูง<span class="w3-small" style="color: red">(*กรอกเป็นตัวเลขเท่านั้น)</span></p>
+                <p class="w3-medium"><b>หมายเลข 6:</b> เป็นส่วนที่ให้ผู้ใช้เลือกความถี่ในการออกกำลังกาย</p>
+                <p class="w3-medium"><b>หมายเลข 7:</b> เป็นส่วนที่ให้ผู้ใช้เลือกจุดประสงค์ของการใช้งาน</p>
+                <p class="w3-medium"><b>หมายเลข 8:</b> เป็นปุ่มที่จะนำไปสู่หน้าต่อไป<br>เมื่อกรอกข้อมูลครบถ้วนแล้วถึงจะสามารถไปหน้าต่อไปได้</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Main Menu Section -->
+        <div class="w3-row w3-padding-64" id="mainPage">
+            <div class="w3-col l6 w3-padding-large">
+                <h4 class="w3-center">Main Menu Page</h4>
+                <p class="w3-large">หน้านี้เป็นหน้าเมนูหลักที่จะแสดงแคลลอรี่ที่ร่างกายต้องการในวันนี และปุ่มกดที่จะไปยังเมนูย่อยต่างๆ</p>
+                <p class="w3-medium"><b>หมายเลข 1:</b> เป็นค่าแคลลอรี่ที่ควรทานในวันนี้ <span class="w3-small" style="color: red">เป็นไปตามจุดประสงค์การใช้งานของท่าน</span></p>
+                <p class="w3-medium"><b>หมายเลข 2:</b> เป็นปุ่มที่จะนำไปสู่หน้ากรอกปริมาณอาหารที่ทานไปแล้ว</p>
+                <p class="w3-medium"><b>หมายเลข 3:</b> เป็นปุ่มที่จะนำไปสู่หน้าเมนูแนะนำ <span class="w3-small" style="color: red">ซึ่งจะมีปริมาณแคลลอรี่โดยประมาณของเมนูอาหารนั้นๆด้วย</span></p>
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <img src="./assets/images/helpMain.jpg" class="w3-round w3-image w3-opacity-min" alt="MainMenuImg" style="width:100%">
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Received Calories Calculator Section -->
+        <div class="w3-row w3-padding-64" id="receivedCalPage">
+            <div class="w3-col l6 w3-padding-large">
+                <img src="./assets/images/helpReceivedCal.jpg" class="w3-round w3-image w3-opacity-min" alt="ReceievedCalImg" width="600" height="750">
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <h4 class="w3-center">Received Calories Calculator Page</h4>
+                <p class="w3-large">หน้านี้เป็นหน้าคำนวณแคลลอรี่ที่ทานไปแล้ว <span class="w3-meduim" style="color: red">โดยจะต้องทำการเลือกเมนูอาหาร และกรอกปริมาณอาหารลงไป</span></p>
+                <p class="w3-medium"><b>หมายเลข 1:</b> เป็นส่วนที่ให้ผู้ใช้เลือกเมนูอาหารที่ทานไป <span class="w3-small" style="color: red">โดยสามารถเลือกได้หลายเมนู <br>แต่เลือกได้ 1 เมนู/ครั้ง</span></p>
+                <p class="w3-medium"><b>หมายเลข 2:</b> เป็นส่วนที่ให้ผู้ใช้กรอกปริมาณอาหารโดนประมาณ <span class="w3-small" style="color: red">(*กรอกเป็นตัวเลข <br>ในหน่วยปริมาณเป็น กรัม)</span></p>
+                <p class="w3-medium"><b>หมายเลข 3:</b> เป็นปุ่มเพิ่มเมนูอาหาร <span class="w3-small" style="color: red">ต้องกดปุ่มนี้ทุกครั้งหลังเลือกเมนูอาหาร</span></p>
+                <p class="w3-medium"><b>หมายเลข 4:</b> เป็นปุ่มยืนยันในการเพิ่มเมนูอาหาร เพื่อนำไปคำนวณ <span class="w3-small" style="color: red">เมื่อกรอกข้อมูลครบถ้วนแล้วให้กดปุ่มนี้ <br>เพื่อทำการคำนวณแคลลอรี่ที่ทานไปแล้ว</span></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Received Calories Calculator2 Section -->
+        <div class="w3-row w3-padding-64" id="receivedCal2Page">
+            <div class="w3-col l6 w3-padding-large">
+                <h4 class="w3-center">Received Calories Calculator2 Page</h4>
+                <p class="w3-large">หน้านี้เป็นหน้าหลังจากที่ทำการเพิ่มเมนูอาหาร <span class="w3-meduim" style="color: red">ในกรณีที่ผู้ใช้ต้องการลบเมนูอาหารออกก่อนจะทำการคำนวณ</span></p>
+                <p class="w3-medium"><span class="w3-small" style="color: red">*</span><b>หมายเหตุ:</b> หน้านี้จะเป็นหน้าที่สามารถลบเมนูอาหารที่เลือกไปก่อนหน้าได้ <br>ในกรณีที่กรอกปริมาณอาหารผิด</p>
+                <p class="w3-medium"><span class="w3-small" style="color: red">*</span><b>หมายเหตุ:</b> หากผู้ใช้ไม่ต้องการลบเมนูอาหารให้กดปุ่ม Finish เพื่อยืนยันการเพิ่มเมนู และเริ่มคำนวณได้เลย</p>
+                <p class="w3-medium"><b>หมายเลข 1:</b> เป็นส่วนที่แสดงชื่อรายการอาหารที่ทำการเพิ่มไปแล้ว</p>
+                <p class="w3-medium"><b>หมายเลข 2:</b> เป็นส่วนที่แสดงปริมาณอาหารที่ทำการกรอกไปแล้ว</p>
+                <p class="w3-medium"><b>หมายเลข 3:</b> เป็นส่วนที่แสดงแคลลอรี่ของอาหารที่ทำการเพิ่มไปแล้ว <span class="w3-small" style="color: red"><br>โดยจะคำนวณจากปริมาณอาหารที่กรอกไปก่อนหน้า</span></p>
+                <p class="w3-medium"><b>หมายเลข 4:</b> เป็นส่วนที่แสดงช่องให้ผู้ใช้เลือกลบเมนูอาหาร <span class="w3-small" style="color: red"><br>ในกรณีที่ผู้ใช้ต้องการลบหรือแก้ไขเมนูอาหาร</span></p>
+                <p class="w3-medium"><b>หมายเลข 5:</b> เป็นส่วนที่ส่วนที่ให้ผู้ใช้สามารถเลือกเมนูอาหารที่ต้องการลบ <span class="w3-small" style="color: red"><br>โดยสามารถลบได้หลายรายการ แต่ต้องเลือกลบทีละรายการ</span></p>
+                <p class="w3-medium"><b>หมายเลข 6:</b> เป็นปุ่มยืนยันการลบเมนูอาหาร</p>
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <img src="./assets/images/helpReceivedCal2.jpg" class="w3-round w3-image w3-opacity-min" alt="ReceievedCal2Img" style="width:100%">
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Recommended Menu Section -->
+        <div class="w3-row w3-padding-64" id="fooddetailPage">
+            <div class="w3-col l6 w3-padding-large">
+                <img src="./assets/images/helpFood.jpg" class="w3-round w3-image w3-opacity-min" alt="FoodDetailImg" width="600" height="750">
+                <img src="./assets/images/helpFood2.jpg" class="w3-round w3-image w3-opacity-min" alt="FoodDetail2Img" width="600" height="750">
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <h4 class="w3-center">Recommended Menu Page</h4>
+                <p class="w3-large">หน้านี้เป็นหน้าเมนูแนะนำ <span class="w3-meduim" style="color: red">ซึ่งจะมีปริมาณแคลลอรี่โดยประมาณของเมนูอาหารเมนูนั้นๆด้วย</span></p>
+                <p class="w3-medium"><b>หมายเลข 1:</b> เป็นรูปประกอบของเมนูอาหารนั้นๆ</p>
+                <p class="w3-medium"><b>หมายเลข 2:</b> เป็นชื่อเมนูอาหารนั้นๆ</p>
+                <p class="w3-medium"><b>หมายเลข 3:</b> เป็นแคลลอรี่โดยประมาณของเมนูอาหารนั้นๆ</p>
+                <p class="w3-medium"><b>หมายเลข 4:</b> เป็นปริมาณแคลลอรี่โดยประมาณของเมนูอาหารนั้นๆ</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Result Section -->
+        <div class="w3-row w3-padding-64" id="resultPage">
+            <div class="w3-col l6 w3-padding-large">
+                <h4 class="w3-center">Result Page</h4>
+                <p class="w3-large">หน้านี้เป็นหน้าแสดงผลลัพธ์หลังทำการเพิ่มเมนูอาหารที่ทานไปแล้วเสร็จเรียบร้อยแล้ว</p>
+                <p class="w3-medium"><b>หมายเลข 1:</b> เป็นค่าแคลลอรี่คงเหลือที่ควรทานภายในวันนี้</p>
+                <p class="w3-medium"><b>หมายเลข 2:</b> เป็นปุ่มที่จะกลับไปหน้าเมนูหลัก</p>
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <img src="./assets/images/helpResult.jpg" class="w3-round w3-image w3-opacity-min" alt="ResultImg" style="width:100%">
+            </div>
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-light-grey w3-padding-32">
+        <p>PowerBuy ขายเครื่องใช้ไฟฟ้าอิเล็กทรอนิกซ์</p>
+    </footer>
+
+</body>
+
+</html

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - server.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>server.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">52.13</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">376</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">39.44</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">4.36</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">var http = require(&#039;http&#039;);
+var express = require(&#039;express&#039;);
+var body = require(&#039;body-parser&#039;);
+var app = express();
+var path = require(&#039;path&#039;);
+var urlencodedParser = body.urlencoded({ extend: true });
+app.use(express.static(path.join(__dirname, &#039;public&#039;)));
+app.use(body.urlencoded({ extended: false }));
+var ArrayList = require(&#039;./ArrayList.js&#039;);
+var Visitor = require(&#039;./Visitor.js&#039;);
+var calculate = require(&#039;./calculate.js&#039;);
+var MenuList = require(&#039;./MenuList.js&#039;);
+var addcal = require(&#039;./addcal.js&#039;);
+var calculate1;
+var TDEE, vName, vAge, vGender, vWeight, vHeight, vFrequency, vOption;
+var i;
+
+//Add listอาหาร บน dropdown
+var Listname = new ArrayList(100);
+var ListValue = new ArrayList(100);
+Listname.add(&quot;พิซซ่า&quot;);
+ListValue.add(3);
+Listname.add(&quot;ข้าวกะเพรา&quot;);
+ListValue.add(1.95);
+Listname.add(&quot;ข้าวไก่กระเทียม&quot;);
+ListValue.add(1.95);
+Listname.add(&quot;ข้าวไข่เจียว&quot;);
+ListValue.add(2.70);
+Listname.add(&quot;ข้าวแกงกะหรี่&quot;);
+ListValue.add(4.70);
+Listname.add(&quot;ไก่ย่าง,ไก่อบ&quot;);
+ListValue.add(3.28);
+Listname.add(&quot;ข้าวผัดผงกะหรี่&quot;);
+ListValue.add(3.10);
+Listname.add(&quot;ข้าวผัด&quot;);
+ListValue.add(2.20);
+Listname.add(&quot;ขนมปังแผ่น&quot;);
+ListValue.add(2.60);
+Listname.add(&quot;แฮมเบอเกอร์&quot;);
+ListValue.add(2.2);
+Listname.add(&quot;ก๋วยเตี๋ยวน้ำ&quot;);
+ListValue.add(1.10);
+Listname.add(&quot;ก๋วยเตี๋ยวแห้ง&quot;);
+ListValue.add(1.80);
+Listname.add(&quot;ก๋วยจั๊บ&quot;);
+ListValue.add(2.40);
+Listname.add(&quot;แกงจืด&quot;);
+ListValue.add(0.9);
+Listname.add(&quot;ไก่ทอด&quot;);
+ListValue.add(2.5);
+Listname.add(&quot;ขนมจีนน้ำยา&quot;);
+ListValue.add(1.70);
+
+var menulist = []; //collect visitor eating , menulist is an object array of MenuList class
+var count = 0;
+var visitorCal = new ArrayList(100); //collect list of visitor eating into array
+//Big Head
+var Big = &#039;&lt;!DOCTYPE html&gt;&#039;
+Big += &#039;&lt;html lang=&quot;en&quot;&gt;&#039;
+Big += &#039;&lt;head&gt;&#039;
+    //Head
+var head = &#039;&lt;link rel=&quot;shortcut icon&quot; href=&quot;favicon.ico&quot;&gt;&#039;;
+head += &#039;&lt;link href=&quot;https://fonts.googleapis.com/css?family=Roboto:400,100,300,700&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;&#039;;
+head += &#039;&lt;link rel=&quot;stylesheet&quot; href=&quot;./assets/css/Info.css&quot;&gt;&#039;;
+head += &#039;&lt;link rel=&quot;stylesheet&quot; href=&quot;./assets/css/main.css&quot;&gt;&#039;;
+head += &#039;&lt;link rel=&quot;stylesheet&quot; href=&quot;./assets/css/cal.css&quot;&gt;&#039;;
+head += &#039;&lt;link href=&quot;https://fonts.googleapis.com/css?family=Athiti&quot; rel=&quot;stylesheet&quot;&gt;&#039;
+head += &#039;&lt;link href=&quot;https://fonts.googleapis.com/css?family=Rajdhani&quot; rel=&quot;stylesheet&quot;&gt;&#039;
+head += &#039;&lt;link href=&quot;https://fonts.googleapis.com/css?family=Major+Mono+Display&quot; rel=&quot;stylesheet&quot;&gt;&#039;
+head += &#039;&lt;link rel=&quot;stylesheet&quot; href=&quot;./assets/css/result.css&quot;&gt;&#039;;
+head += &#039;&lt;meta charset=&quot;utf-8&quot;&gt;&#039;;
+head += &#039;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&#039;;
+head += &#039;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css&quot;&gt;&#039;;
+head += &#039;&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js&quot;&gt;&lt;/script&gt;&#039;;
+head += &#039;&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js&quot;&gt;&lt;/script&gt;&#039;;
+head += &#039;&lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;&#039;;
+head += &#039;&lt;/head&gt;&#039;;
+
+/////////////Home Page/////////////
+app.get(&#039;/&#039;, function(req, res) {
+    res.sendFile(__dirname + &quot;/&quot; + &quot;index.html&quot;);
+});
+
+/////////////Login Page/////////////
+app.get(&#039;/help&#039;, function(req, res) {
+    res.sendFile(__dirname + &quot;/&quot; + &quot;help.html&quot;);
+});
+
+/////////////Info Page/////////////
+app.get(&#039;/info&#039;, urlencodedParser, function(req, res) {
+    var home = Big + &#039;&lt;title&gt;Information&lt;/title&gt;&#039; + head
+    home += &#039;&lt;body id=&quot;backinfo&quot;&gt;&#039;
+    home += &#039;&lt;div style=&quot;margin-top: 8%;&quot; class=&quot;container&quot;&gt;&#039;
+    home += &#039;&lt;center&gt;&lt;h1 id=&quot;plzfill&quot;&gt;Please Fill Information&lt;/h1&gt;&lt;/center&gt;&#039;
+    home += &#039;&lt;div id=&quot;backinfo2&quot;&gt;&#039;
+    home += &#039;&lt;div class=&quot;row&quot;&gt;&#039;
+    home += &#039;&lt;div class=&quot;col-md-3&quot;&gt;&lt;/div&gt;&#039;;
+    home += &#039;&lt;div class=&quot;col-md-6&quot;&gt;&#039;;
+    home += &#039;&lt;form id=&quot;cssform&quot; action=&quot;/mainmenu&quot; method=&quot;post&quot;&gt;&#039;
+
+    //Name
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;col-md-4&quot;&gt;Name : &lt;/label&gt;&#039;
+    home += &#039;&lt;input class=&quot;col-md-8&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Name&quot; onkeypress=&quot;return (event.charCode &gt;= 65 &amp;&amp; event.charCode &lt;= 90) || (event.charCode &gt;= 97 &amp;&amp; event.charCode &lt;= 122)&quot; id=&quot;fullname&quot; required&gt;&lt;/div&gt;&#039;
+        //age
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;col-md-4&quot;&gt;Age : &lt;/label&gt;&#039;
+    home += &#039;&lt;input class=&quot;col-md-8&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Age&quot; maxlength=&quot;3&quot; onkeypress=&quot;return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57 || event.charCode == 46&quot; id=&quot;age&quot; required&gt;&lt;/div&gt;&#039;
+        //gender
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;col-md-4&quot;&gt;Gender : &lt;/label&gt;&#039;
+    home += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;Gender&quot; value=&quot;male&quot; required&gt;Male&#039;
+    home += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;Gender&quot; value=&quot;female&quot; required&gt;Female&lt;/div&gt;&#039;
+        //Weight
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;col-md-4&quot;&gt;Weight : &lt;/label&gt;&#039;
+    home += &#039;&lt;input class=&quot;col-md-8&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Weight&quot; id=&quot;weight&quot; required onkeypress=&quot;return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57 || event.charCode == 46&quot;&gt;&lt;/div&gt;&#039;
+        //Height
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;col-md-4&quot;&gt;Height : &lt;/label&gt;&#039;
+    home += &#039;&lt;input class=&quot;col-md-8&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Height&quot; id=&quot;Height&quot; required onkeypress=&quot;return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57 || event.charCode == 46&quot;&gt;&lt;/div&gt;&#039;
+        //Exercise frequency
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;span class=&quot;col-xs-2&quot;&gt;&lt;/span&gt;&lt;label class=&quot;col-xs-2&quot;&gt;Exercise frequency : &lt;/label&gt;&#039;
+    home += &#039;&lt;div class=&quot;col-xs-2&quot;&gt;&lt;select name=&quot;frequency&quot; class=&quot;form-control&quot;&gt;&#039;
+    home += &#039;&lt;option value=&quot;0&quot; required&gt;No Activity&lt;/option&gt;&lt;option value=&quot;1&quot; required&gt;1-3 time a week&lt;/option&gt;&lt;option required value=&quot;2&quot;&gt;4-5 time a week&lt;/option&gt;&lt;option required value=&quot;3&quot;&gt;6-7 time a week&lt;/option&gt;&lt;option required value=&quot;4&quot;&gt;14 time a week&lt;/option&gt;&#039;
+    home += &#039;&lt;/select&gt;&lt;/div&gt;&lt;/div&gt;&#039;
+        //Option
+    home += &#039;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;col-md-4&quot;&gt;Purpose : &lt;/label&gt;&lt;br&gt;&#039;
+    home += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;option&quot; value=&quot;gain weight&quot; required&gt;ต้องการเพิ่มน้ำหนัก&#039;
+    home += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;option&quot; value=&quot;lose weight&quot; required&gt; ต้องการลดน้ำหนัก&lt;/div&gt;&#039;
+        //Submit button
+        // home += &#039;&lt;button onclick=&quot;myFunction()&quot;&gt;&lt;a href=&quot;/mainmenu&quot;&gt;click&lt;/a&gt;&lt;/button&gt;&#039;
+    home += &#039;&lt;center&gt;&lt;input id=&quot;submit-btn&quot; type=&quot;submit&quot; value=&quot;ENTER&quot; class=&quot;btn btn-primary&quot;&gt;&lt;/center&gt;&#039;
+    home += &#039;&lt;/form&gt;&#039;
+    home += &#039;&lt;/div&gt;&#039;
+    home += &#039;&lt;div class=&quot;col-md-3&quot;&gt;&lt;/div&gt;&#039;;
+    home += &#039;&lt;/div&gt;&#039;
+    home += &#039;&lt;/div&gt;&#039;
+    home += &#039;&lt;/div&gt;&#039;
+    home += &#039;&lt;/body&gt;&#039;;
+    res.send(home);
+});
+
+/////////////check info and mainmenu page/////////////
+app.post(&#039;/mainmenu&#039;, function(req, res) {
+    visitor = new Visitor(req.body.Name, req.body.Age, req.body.Gender, req.body.Weight, req.body.Height, req.body.frequency, req.body.option);
+    vName = visitor.getName();
+    vAge = visitor.getAge();
+    vGender = visitor.getGender();
+    vWeight = visitor.getWeight();
+    vHeight = visitor.getHeight();
+    vFrequency = visitor.getFrequency();
+    vOption = visitor.getOption();
+
+    calculate1 = new calculate(vWeight, vHeight, vAge, vGender, vFrequency)
+    TDEE = calculate1.getTDEE()
+
+    var menu = Big + &#039;&lt;title&gt;Main Menu&lt;/title&gt;&#039; + head
+    menu += &#039;&lt;body id=&quot;backmain&quot;&gt;&#039;
+    menu += &#039;&lt;div style=&quot;margin-top: 8%;&quot; class=&quot;container&quot;&gt;&#039;
+    menu += &#039;&lt;center&gt;&lt;h1 id=&quot;plzfill2&quot;&gt;แคลอรีที่คุณ &#039; + vName + &#039; ควรทานวันนี้ คือ!&lt;/h1&gt;&lt;/center&gt;&#039;
+    menu += &#039;&lt;div id=&quot;backinfo2&quot;&gt;&#039;
+
+    menu += &#039;&lt;h1 id=&quot;tdee&quot;&gt;&#039; + TDEE + &#039;&lt;/h1&gt;&#039;
+    menu += &#039;&lt;h1 id=&quot;calmain&quot;&gt;calories!&lt;/h1&gt;&#039;
+    menu += &#039;&lt;/div&gt;&#039;
+    menu += &#039;&lt;center&gt;&#039;
+    menu += &#039;&lt;a id=&quot;calcal&quot; href=&quot;/cal&quot;&gt;Calculate Received Calories&lt;/a&gt;&#039;
+    menu += &#039;&lt;a id=&quot;food&quot; href=&quot;/fooddetail&quot;&gt;Recommended Menu&lt;/a&gt;&lt;/center&gt;&#039;
+    menu += &#039;&lt;/div&gt;&#039;
+    menu += &#039;&lt;/body&gt;&#039;
+    res.send(menu);
+});
+
+app.get(&#039;/mainmenu&#039;, function(req, res) {
+    var menu = Big + &#039;&lt;title&gt;Main Menu&lt;/title&gt;&#039; + head
+    menu += &#039;&lt;body id=&quot;backmain&quot;&gt;&#039;
+    menu += &#039;&lt;div style=&quot;margin-top: 8%;&quot; class=&quot;container&quot;&gt;&#039;
+    menu += &#039;&lt;center&gt;&lt;h1 id=&quot;plzfill2&quot;&gt;แคลอรีที่คุณ &#039; + vName + &#039; ควรทานวันนี้ คือ!&lt;/h1&gt;&lt;/center&gt;&#039;
+    menu += &#039;&lt;div id=&quot;backinfo2&quot;&gt;&#039;
+
+    menu += &#039;&lt;h1 id=&quot;tdee&quot;&gt;&#039; + TDEE + &#039;&lt;/h1&gt;&#039;
+    menu += &#039;&lt;h1 id=&quot;calmain&quot;&gt;calories!&lt;/h1&gt;&#039;
+    menu += &#039;&lt;/div&gt;&#039;
+    menu += &#039;&lt;center&gt;&#039;
+    menu += &#039;&lt;a id=&quot;calcal&quot; href=&quot;/cal&quot;&gt;Calculate Received Calories&lt;/a&gt;&#039;
+    menu += &#039;&lt;a id=&quot;food&quot; href=&quot;/fooddetail&quot;&gt;Recommended Menu&lt;/a&gt;&lt;/center&gt;&#039;
+    menu += &#039;&lt;/div&gt;&#039;
+    menu += &#039;&lt;/body&gt;&#039;
+
+    res.send(menu);
+});
+
+var cal
+/////////////Cal ที่ทานไป page/////////////
+app.get(&#039;/cal&#039;, urlencodedParser, function(req, res) {
+    cal = &#039; &#039;;
+    cal += Big + &#039;&lt;title&gt;Received Calories Calculator&lt;/title&gt;&#039; + head
+    cal += &#039;&lt;body id=&quot;backcal&quot;&gt;&#039;
+    cal += &#039;&lt;div style=&quot;margin-top: 8%;&quot; class=&quot;container&quot;&gt;&#039;
+    cal += &#039;&lt;center&gt;&lt;h1 id=&quot;receivedCalCal&quot;&gt;Please Fill Food Quantity&lt;/h1&gt;&lt;/center&gt;&#039;
+    cal += &#039;&lt;form action=&quot;/cal1&quot; method=&quot;post&quot;&gt;&#039;
+    cal += &#039;&lt;div id=&quot;backcal2&quot; class=&quot;form-group&quot;&gt;&#039;
+    cal += &#039;&lt;span class=col-md-2&gt;&lt;/span&gt;&#039;
+    cal += &#039;&lt;center&gt;&lt;select class=&quot;col-md-4&quot; name=&quot;menuIdx&quot; class=&quot;form-control&quot;&gt;&#039;
+    cal += &#039;&lt;option value=&quot; &quot; required&gt;-- Choose Menu Here --&lt;/option&gt;&#039;
+        //show menu list in dropdown
+    for (var j = 0; j &lt; Listname.trim(); j++) {
+        cal += &#039;&lt;option required value=&quot;&#039; + j + &#039;&quot;&gt;&#039; + Listname.Get(j) + &#039;&lt;/option&gt;&#039;;
+    }
+    cal += &#039;&lt;/select&gt;&lt;span class=&quot;col-md-2&quot;&gt;&lt;/span&gt;&#039;
+    cal += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Quantity&quot; onkeypress=&quot;return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57 || event.charCode == 46&quot; placeholder=&quot;Quantity in grams&quot; required&gt;&lt;/input&gt;&#039;
+    cal += &#039;&lt;span class=col-md-2&gt;&lt;input type=&quot;submit&quot; class=&quot;add-btn&quot; value=&quot;Add to list&quot;&gt;&lt;/span&gt;&#039;
+    cal += &#039;&lt;/center&gt;&#039;
+    cal += &#039;&lt;/div&gt;&lt;br&gt;&#039;
+    cal += &#039;&lt;/form&gt;&lt;br&gt;&#039;
+    cal += &#039;&lt;center&gt;&lt;a class=&quot;finish-btn&quot; href=&quot;/result&quot;&gt;Calculate Now!&lt;/a&gt;&lt;a id=&quot;backmenuC&quot; href=&quot;/mainmenu&quot;&gt;Back to Main Menu&lt;/a&gt;&lt;/center&gt;&#039;
+    if(!visitorCal.isEmpty()){
+        cal += &#039;&lt;form action=&quot;/cal2&quot; method=&quot;post&quot;&gt;&#039;
+        cal += &#039;&lt;div id=&quot;backcal3&quot;&gt;&#039;
+        cal += &#039;&lt;center&gt;&lt;table style=&quot;width: 100%;&quot;&gt;&lt;tr&gt;&#039;
+        cal += &#039;&lt;th&gt;Food Name&lt;/th&gt;&lt;th&gt;Food Quantity (in grams)&lt;/th&gt;&lt;th&gt;Calories&lt;/th&gt;&lt;th&gt;Delete&lt;/th&gt;&lt;/tr&gt;&#039;
+        for (var k = 0; k &lt; visitorCal.trim(); k++) {
+            cal += &#039;&lt;tr&gt;&lt;td name=&quot;menuName&quot;&gt;&#039; + Listname.Get(visitorCal.Get(k).getMenuIdx()) + &#039;&lt;/td&gt;&#039;
+            cal += &#039;&lt;td&gt;&#039; + visitorCal.Get(k).getQuantity() + &#039;&lt;/td&gt;&#039;
+            cal += &#039;&lt;td&gt;&#039; + ListValue.Get(visitorCal.Get(k).getMenuIdx())*visitorCal.Get(k).getQuantity() + &#039;&lt;/td&gt;&#039;
+            cal += &#039;&lt;td&gt;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;food&quot; required value=&quot;&#039; + k + &#039;&quot; required&gt;&lt;/td&gt;&lt;/tr&gt;&#039;
+        }
+        cal += &#039;&lt;/table&gt;&lt;/center&gt;&#039;
+        cal += &#039;&lt;center&gt;&lt;input id=&quot;del-btn&quot; type=&quot;submit&quot; value=&quot;Delete&quot;&gt;&lt;/center&gt;&#039;
+        cal += &#039;&lt;/div&gt;&#039;
+        cal += &#039;&lt;/form&gt;&#039;
+    }
+    cal += &#039;&lt;/div&gt;&#039;
+    cal += &#039;&lt;/body&gt;&#039;;
+    res.send(cal);
+});
+
+
+app.post(&#039;/cal1&#039;, urlencodedParser, function(req, res) {
+    if(req.body.menuIdx != &#039; &#039;){
+        //collect visitor eating
+        menulist[count] = new MenuList(req.body.menuIdx, req.body.Quantity);
+        //Add visitor eating into array
+        visitorCal.add(menulist[count])
+        count += 1;
+    }
+    var cal2 = Big + &#039;&lt;title&gt;Received Calories Calculator Page&lt;/title&gt;&#039; + head
+    cal2 += &#039;&lt;body id=&quot;backcal&quot;&gt;&#039;
+    if (req.body.menuIdx == &#039; &#039;){
+        cal2 += &#039;&lt;script&gt;alert(&quot;Please Choose Menu!&quot;);&lt;/script&gt;&#039;
+    }
+    cal2 += &#039;&lt;div style=&quot;margin-top: 8%;&quot; class=&quot;container&quot;&gt;&#039;
+    cal2 += &#039;&lt;center&gt;&lt;h1 id=&quot;receivedCalCal&quot;&gt;Please Fill Food Quantity&lt;/h1&gt;&lt;/center&gt;&#039;
+    cal2 += &#039;&lt;form action=&quot;/cal1&quot; method=&quot;post&quot;&gt;&#039;
+    cal2 += &#039;&lt;div id=&quot;backcal2&quot; class=&quot;form-group&quot;&gt;&#039;
+    cal2 += &#039;&lt;span class=col-md-2&gt;&lt;/span&gt;&#039;
+    cal2 += &#039;&lt;center&gt;&lt;select class=&quot;col-md-4&quot; name=&quot;menuIdx&quot; class=&quot;form-control&quot;&gt;&#039;
+    cal2 += &#039;&lt;option value=&quot; &quot; required&gt;-- Choose Menu Here --&lt;/option&gt;&#039;
+        //show menu list in dropdown
+    for (var j = 0; j &lt; Listname.trim(); j++) {
+        cal2 += &#039;&lt;option required value=&quot;&#039; + j + &#039;&quot;&gt;&#039; + Listname.Get(j) + &#039;&lt;/option&gt;&#039;;
+    }
+    cal2 += &#039;&lt;/select&gt;&lt;span class=&quot;col-md-2&quot;&gt;&lt;/span&gt;&#039;
+    cal2 += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Quantity&quot; onkeypress=&quot;return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57 || event.charCode == 46&quot; placeholder=&quot;Quantity in grams&quot; required&gt;&lt;/input&gt;&#039;
+    cal2 += &#039;&lt;span class=col-md-2&gt;&lt;input type=&quot;submit&quot; class=&quot;add-btn&quot; value=&quot;Add to list&quot;&gt;&lt;/span&gt;&#039;
+    cal2 += &#039;&lt;/center&gt;&#039;
+    cal2 += &#039;&lt;/div&gt;&lt;br&gt;&#039;
+    cal2 += &#039;&lt;/form&gt;&lt;br&gt;&#039;
+
+    cal2 += &#039;&lt;center&gt;&lt;a class=&quot;finish-btn&quot; href=&quot;/result&quot;&gt;Calculate Now!&lt;/a&gt;&lt;a id=&quot;backmenuC&quot; href=&quot;/mainmenu&quot;&gt;Back to Main Menu&lt;/a&gt;&lt;/center&gt;&#039;
+    if(!visitorCal.isEmpty()){
+        cal2 += &#039;&lt;form action=&quot;/cal2&quot; method=&quot;post&quot;&gt;&#039;
+        cal2 += &#039;&lt;div id=&quot;backcal3&quot;&gt;&#039;
+        cal2 += &#039;&lt;center&gt;&lt;table style=&quot;width: 100%;&quot;&gt;&lt;tr&gt;&#039;
+        cal2 += &#039;&lt;th&gt;Food Name&lt;/th&gt;&lt;th&gt;Food Quantity (in grams)&lt;/th&gt;&lt;th&gt;Calories&lt;/th&gt;&lt;th&gt;Delete&lt;/th&gt;&lt;/tr&gt;&#039;
+        for (var k = 0; k &lt; visitorCal.trim(); k++) {
+            cal2 += &#039;&lt;tr&gt;&lt;td name=&quot;menuName&quot;&gt;&#039; + Listname.Get(visitorCal.Get(k).getMenuIdx()) + &#039;&lt;/td&gt;&#039;
+            cal2 += &#039;&lt;td&gt;&#039; + visitorCal.Get(k).getQuantity() + &#039;&lt;/td&gt;&#039;
+            cal2 += &#039;&lt;td&gt;&#039; + ListValue.Get(visitorCal.Get(k).getMenuIdx())*visitorCal.Get(k).getQuantity() + &#039;&lt;/td&gt;&#039;
+            cal2 += &#039;&lt;td&gt;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;food&quot; required value=&quot;&#039; + k + &#039;&quot; required&gt;&lt;/td&gt;&lt;/tr&gt;&#039;
+        }
+        cal2 += &#039;&lt;/table&gt;&lt;/center&gt;&#039;
+        cal2 += &#039;&lt;center&gt;&lt;input id=&quot;del-btn&quot; type=&quot;submit&quot; value=&quot;Delete&quot;&gt;&lt;/center&gt;&#039;
+        cal2 += &#039;&lt;/div&gt;&#039;
+        cal2 += &#039;&lt;/form&gt;&#039;
+    }
+
+    cal2 += &#039;&lt;/div&gt;&#039;
+    cal2 += &#039;&lt;/body&gt;&#039;;
+    res.send(cal2);
+});
+
+app.post(&#039;/cal2&#039;, urlencodedParser, function(req, res) {
+    console.log(req.body.food)
+    visitorCal.remove(req.body.food)
+    var cal2 = Big + &#039;&lt;title&gt;Received Calories Calculator Page&lt;/title&gt;&#039; + head
+    cal2 += &#039;&lt;body id=&quot;backcal&quot;&gt;&#039;
+    cal2 += &#039;&lt;div style=&quot;margin-top: 8%;&quot; class=&quot;container&quot;&gt;&#039;
+    cal2 += &#039;&lt;center&gt;&lt;h1 id=&quot;receivedCalCal&quot;&gt;Please Fill Food Quantity&lt;/h1&gt;&lt;/center&gt;&#039;
+    cal2 += &#039;&lt;form action=&quot;/cal1&quot; method=&quot;post&quot;&gt;&#039;
+    cal2 += &#039;&lt;div id=&quot;backcal2&quot; class=&quot;form-group&quot;&gt;&#039;
+    cal2 += &#039;&lt;span class=col-md-2&gt;&lt;/span&gt;&#039;
+    cal2 += &#039;&lt;center&gt;&lt;select class=&quot;col-md-4&quot; name=&quot;menuIdx&quot; class=&quot;form-control&quot;&gt;&#039;
+    cal2 += &#039;&lt;option value=&quot; &quot; required&gt;-- Choose Menu Here --&lt;/option&gt;&#039;
+        //show menu list in dropdown
+    for (var j = 0; j &lt; Listname.trim(); j++) {
+        cal2 += &#039;&lt;option required value=&quot;&#039; + j + &#039;&quot;&gt;&#039; + Listname.Get(j) + &#039;&lt;/option&gt;&#039;;
+    }
+    cal2 += &#039;&lt;/select&gt;&lt;span class=&quot;col-md-2&quot;&gt;&lt;/span&gt;&#039;
+    cal2 += &#039;&lt;input class=&quot;col-md-2&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;Quantity&quot; onkeypress=&quot;return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57 || event.charCode == 46&quot; placeholder=&quot;Quantity in grams&quot; required&gt;&lt;/input&gt;&#039;
+    cal2 += &#039;&lt;span class=col-md-2&gt;&lt;input type=&quot;submit&quot; class=&quot;add-btn&quot; value=&quot;Add to list&quot;&gt;&lt;/span&gt;&#039;
+    cal2 += &#039;&lt;/center&gt;&#039;
+    cal2 += &#039;&lt;/div&gt;&lt;br&gt;&#039;
+    cal2 += &#039;&lt;/form&gt;&lt;br&gt;&#039;
+
+    cal2 += &#039;&lt;center&gt;&lt;a class=&quot;finish-btn&quot; href=&quot;/result&quot;&gt;Calculate Now!&lt;/a&gt;&lt;a id=&quot;backmenuC&quot; href=&quot;/mainmenu&quot;&gt;Back to Main Menu&lt;/a&gt;&lt;/center&gt;&#039;
+    if(!visitorCal.isEmpty()){
+        cal2 += &#039;&lt;form action=&quot;/cal2&quot; method=&quot;post&quot;&gt;&#039;
+        cal2 += &#039;&lt;div id=&quot;backcal3&quot;&gt;&#039;
+        cal2 += &#039;&lt;center&gt;&lt;table style=&quot;width: 100%;&quot;&gt;&lt;tr&gt;&#039;
+        cal2 += &#039;&lt;th&gt;Food Name&lt;/th&gt;&lt;th&gt;Food Quantity (in grams)&lt;/th&gt;&lt;th&gt;Calories&lt;/th&gt;&lt;th&gt;Delete&lt;/th&gt;&lt;/tr&gt;&#039;
+        for (var k = 0; k &lt; visitorCal.trim(); k++) {
+            cal2 += &#039;&lt;tr&gt;&lt;td&gt;&#039; + Listname.Get(visitorCal.Get(k).getMenuIdx()) + &#039;&lt;/td&gt;&#039;
+            cal2 += &#039;&lt;td&gt;&#039; + visitorCal.Get(k).getQuantity() + &#039;&lt;/td&gt;&#039;
+            cal2 += &#039;&lt;td&gt;&#039; + ListValue.Get(visitorCal.Get(k).getMenuIdx())*visitorCal.Get(k).getQuantity() + &#039;&lt;/td&gt;&#039;
+            cal2 += &#039;&lt;td&gt;&lt;input class=&quot;col-md-2&quot; type=&quot;radio&quot; name=&quot;food&quot; required value=&quot;&#039; + k + &#039;&quot; required&gt;&lt;/td&gt;&lt;/tr&gt;&#039;
+        }
+        cal2 += &#039;&lt;/table&gt;&lt;/center&gt;&#039;
+        cal2 += &#039;&lt;center&gt;&lt;input id=&quot;del-btn&quot; type=&quot;submit&quot; value=&quot;Delete&quot;&gt;&lt;/center&gt;&#039;
+        cal2 += &#039;&lt;/div&gt;&#039;
+        cal2 += &#039;&lt;/form&gt;&#039;
+    }
+    
+    cal2 += &#039;&lt;/div&gt;&#039;
+    cal2 += &#039;&lt;/body&gt;&#039;;
+    res.send(cal2);
+});
+app.get(&#039;/result&#039;, urlencodedParser, function(req, res) {
+    var result = Big + &#039;&lt;title&gt;Result Page&lt;/title&gt;&#039; + head;
+    var TDEE_remain = TDEE;
+    for (i = 0; i &lt; visitorCal.trim(); i++) {
+
+        quantitycal = visitorCal.Get(i).getQuantity();
+        calcal = ListValue.Get(visitorCal.Get(i).getMenuIdx());
+        var add = new addcal(TDEE_remain, calcal, quantitycal);
+        TDEE_remain = add.getCalTDEE();
+        // result += &#039;&lt;p&gt;result = &#039;+visitorCal.Get(i).getMenuIdx()+&#039; , &#039;+visitorCal.Get(i).getQuantity()+&#039;&lt;/p&gt;&#039;;
+    }
+    TDEE = TDEE_remain;
+    result += &#039;&lt;body id=&quot;back&quot;&gt;&#039;
+    result += &#039;&lt;div class=&quot;container&quot;&gt;&#039;
+    result += &#039;&lt;div id=&quot;showresult&quot;&gt;&lt;h1 id=&quot;resulth1&quot;&gt;RESULT&lt;/h1&gt;&lt;/div&gt;&#039;
+
+    result += &#039;&lt;div id=&quot;back2&quot;&gt;&#039;
+    result += &#039;&lt;h2 id=&quot;remain&quot;&gt;ปริมาณแคลอรี่ที่ควรทานวันนี้ คงเหลือ&lt;/h2&gt;&#039;;
+    result += &#039;&lt;h1 id=&quot;recal&quot;&gt;&#039; + TDEE_remain + &#039;&lt;/h1&gt;&#039;
+    result += &#039;&lt;h1 id=&quot;cal&quot;&gt;calories!&lt;/h1&gt;&#039;
+    result += &#039;&lt;/div&gt;&#039;
+    if(TDEE_remain&gt;1000){
+        result += &#039;&lt;p id=&quot;receivedCalCal&quot;&gt;กินข้าวอีกสักจานไหมครับ เดี๋ยวผอมนะ/p&gt;&#039;
+    }else if(TDEE_remain&gt;500){
+        result += &#039;&lt;p id=&quot;receivedCalCal&quot;&gt;กินอาหารได้นิดนึง อีกนิดสิครับวันนี้ เดี๋ยวผอมนะ&lt;/p&gt;&#039;
+    }else if(TDEE_remain&gt;0){
+        result += &#039;&lt;p id=&quot;receivedCalCal&quot;&gt;กินของทานเล่นอีกนิดสิครับวันนี้ เดี๋ยวผอมนะ&lt;/p&gt;&#039;
+    }else if(TDEE_remain&lt;0){
+        result += &#039;&lt;p id=&quot;receivedCalCal&quot;&gt;หยุดกินได้แล้วจ้าาาาา จะอ้วนแล้วนะ&lt;/p&gt;&#039;
+    }
+    result += &#039;&lt;center&gt;&lt;a id=&quot;backmenu&quot; class=&quot;btn&quot; href=&quot;/mainmenu&quot;&gt;Back to Main Menu&lt;/a&gt;&lt;/center&gt;&#039;
+    result += &#039;&lt;/div&gt;&#039;
+    result += &#039;&lt;/body&gt;&#039;
+
+    visitorCal.clear();
+    res.send(result);
+});
+
+/////////////Recommended Menu Page/////////////
+app.get(&#039;/fooddetail&#039;, function(req, res) {
+    res.sendFile(__dirname + &quot;/&quot; + &quot;fooddetail.html&quot;);
+});
+app.listen(2581);</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "stayfit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "arraylist": "^0.1.0",
+    "chai": "^4.2.0",
+    "chromedriver": "^73.0.0",
+    "express": "^4.16.4",
+    "grunt": "^1.0.3",
+    "grunt-mocha-istanbul": "^5.0.2",
+    "istanbul": "^0.4.5",
+    "mocha": "^6.0.2",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha --recursive --timeout 10000 test/UItest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://dev.azure.com/swu59258/_git/StayFit"
+  },
+  "author": "",
+  "license": "ISC"
+}
