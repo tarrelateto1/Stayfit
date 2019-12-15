@@ -3,6 +3,7 @@ var express = require('express');
 var body = require('body-parser');
 var app = express();
 var path = require('path');
+const request = require('request');
 var urlencodedParser = body.urlencoded({ extend: true });
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(body.urlencoded({ extended: false }));
@@ -154,7 +155,9 @@ app.post('/mainmenu', function(req, res) {
     vHeight = visitor.getHeight();
     vFrequency = visitor.getFrequency();
     vOption = visitor.getOption();
-
+    request('http://10.0.2.150:3000/?name='+vName+'&age=' +vAge+'&gender='+vGender+'&weight='+vWeight+'&height='+vHeight+'&frequency='+vFrequency+'&option='+vOption, function(err, res, body) {
+    console.log(body);
+    });
     calculate1 = new calculate(vWeight, vHeight, vAge, vGender, vFrequency)
     TDEE = calculate1.getTDEE()
 
