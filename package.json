@@ -8,7 +8,7 @@
     "chai": "^4.2.0",
     "chromedriver": "^73.0.0",
     "express": "^4.16.4",
-    "grunt": "^1.0.3",
+    "grunt": "^1.5.3",
     "grunt-mocha-istanbul": "^5.0.2",
     "istanbul": "^0.4.5",
     "mocha": "^6.0.2",
